@@ -24,12 +24,18 @@ package { "redis-server":
     ensure => "latest"
 }
 
+service { "redis-server":
+    ensure => "running",
+    enable => "true",
+    require => Package["redis-server"]
+}
+
 exec { "pip_pika_install":
     command => "git clone git@github.com:pika/pika.git; cd pika; python setup.py install; cd ../; rm -rf pika",
     require => Package["python", "git"]
 }
 
 exec { "pip_others":
-    command => "pip install tornado pymongo jinja2 kotoba imagination tori",
+    command => "pip install tornado pymongo jinja2 kotoba imagination tori redis",
     require => Package["python", "python-pip"]
 }
